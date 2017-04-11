@@ -1,0 +1,5 @@
+<h1>Épreuves</h1>
+<ul>
+{% for e in listeEpreuves %}
+<li><a href={% url 'challenge:editeCode' epreuve_id=e.id%}>Épreuve {{ e.numero }}</a> ({{ e.points }} points) {% if e.reussie == True %}(réussie){% endif %}</li>
+{% endfor %}

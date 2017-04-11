@@ -1,0 +1,16 @@
+{% extends "challenge/base.html" %}
+{% block contenu %}
+  <h1>Résultat de l'épreuve {{ epreuve.numero }}</h1>
+  {% if score > 0 %}
+  <p>Épreuve réussie ! </p>
+  <p>Score de l'épreuve : {{ score }}</p>
+  <p>Votre score total : {{ scoreTot }}</p>
+  {% elif score == 0 %}
+  <p>La solution fournie est incorrecte <a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
+  {% elif score == -2 %}
+  <p>Votre programme met trop de temps à s'executer, il ne peut pas être jugé mais il contient probablement une erreur. <a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
+  {% elif score == -1 %}
+  <p>Votre programme contient une erreur de syntaxe, vérifiez le code. <a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
+  {% endif %}
+
+  {% endblock %}
