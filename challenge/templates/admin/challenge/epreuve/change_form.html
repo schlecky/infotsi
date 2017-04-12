@@ -1,0 +1,40 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style type="text/css" media="screen">
+#editor { 
+  height:275px;
+  width:630px;
+  border:#CCC solid 1px;
+  margin:20px;
+  border-radius:5px;
+}
+</style>
+{% endblock %}
+
+
+
+{% block after_field_sets %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var divEditor = document.createElement('div');
+    divEditor.id="editor";
+    var textarea = document.getElementById("id_test");
+    textarea.parentNode.insertBefore(divEditor,textarea.nextSibling);
+    textarea.style = "display: none"
+    var editor = ace.edit("editor");
+
+    editor.setTheme("ace/theme/clouds");
+    editor.getSession().setMode("ace/mode/python");
+    editor.setValue(textarea.value);
+    editor.clearSelection();
+    function copyCode(){
+      textarea.value = editor.getSession().getValue();
+    } 
+    
+    form = document.getElementById("epreuve_form");
+    form.setAttribute("onsubmit","copyCode()");
+</script>
+{% endblock %}

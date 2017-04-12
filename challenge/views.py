@@ -25,13 +25,13 @@ def ajouteCode(request, epreuve_id):
         score = codeScore(code, epreuve_id)
         etud = request.user.etudiant
         e = Epreuve.objects.get(id=epreuve_id)
-        if(score > 0):
-            c, created = Code.objects.get_or_create(epreuve=e,
-                                                    etudiant=etud)
-            if created or score > c.score:
-                c.code = code
-                c.score = score
-                c.save()
+        #if(score > 0):
+        c, created = Code.objects.get_or_create(epreuve=e,
+                                                etudiant=etud)
+        if created or score > c.score:
+            c.code = code
+            c.score = score
+            c.save()
 
             majScoreEtudiant(etud)
 
@@ -45,9 +45,18 @@ def ajouteCode(request, epreuve_id):
 def editeCode(request, epreuve_id):
     if request.user.is_authenticated:
         epreuve = get_object_or_404(Epreuve, pk=epreuve_id)
+        code = Code.objects.filter(epreuve=epreuve,
+                                etudiant=request.user.etudiant)
+        if code:
+            code = code.get()
+            c = code.code
+        else:
+            c = ""
         return render(request, 'challenge/editecode.html',
                       {'epreuve': epreuve,
-                       'listeJoueurs': listeJoueurs()})
+                       'listeJoueurs': listeJoueurs(),
+                       'code': c,
+                       })
     else:
         return redirect('challenge:loginView')
 
@@ -56,12 +65,13 @@ def codeScore(code, epreuve_id):
     epreuve = get_object_or_404(Epreuve, pk=epreuve_id)
 
     def runCode(q, code, testCode):
-        exec(testCode, globals())
+        exec testCode in globals(), locals()
         try:
             score = scoreFunc(code)
-        except Exception:
+            q.put(score)
+        except Exception as e:
             q.put(-1)
-        q.put(score)
+            print(e)
 
     q = Queue()
     process = Process(target=runCode, args=(q, code, epreuve.test))
@@ -76,15 +86,17 @@ def codeScore(code, epreuve_id):
 
 
 def classement(etudiant):
-    ids = list(Etudiant.objects.values_list('id'))
-    rang = ids.index((etudiant.user.id,))+1
-    total = len(Etudiant.objects.all())
-    return {'pos':rang, "tot":total}
+    l = list(Etudiant.objects.all().order_by('-score'))
+    rang = l.index(etudiant)+1
+    total = len(l)
+    return {'pos': rang, "tot": total}
+
 
 def listeJoueurs():
     joueurs = []
     for e in Etudiant.objects.all().order_by('-score'):
         joueurs.append({
+            'id': e.id,
             'first_name': e.user.first_name,
             'last_name': e.user.last_name,
             'score': e.score,
@@ -96,18 +108,19 @@ def accueilView(request):
     if request.user.is_authenticated:
         user = request.user
         codes = Code.objects.filter(etudiant=user.etudiant)
-        epreuves = Epreuve.objects.all()
+        epreuves = Epreuve.objects.all().order_by('difficulte')
         listeEpreuves = []
         for e in epreuves:
-            if codes.filter(epreuve=e):
+            if codes.filter(epreuve=e) and codes.get(epreuve=e).score>0:
                 r = True
             else:
                 r = False
             listeEpreuves.append({
                 'id': e.id,
-                'numero': e.numero,
                 'reussie': r,
                 'points': e.points,
+                'titre': e.titre,
+                'difficulte': list(range(e.difficulte)),
             })
         statEpreuves={'total': len(listeEpreuves),
                       'restantes': len(listeEpreuves)-len(codes)}

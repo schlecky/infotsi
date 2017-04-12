@@ -10,8 +10,8 @@ class Epreuve(models.Model):
     titre = models.CharField(max_length=50, default="")
     enonce = models.TextField(default="")
     test = models.TextField(default="")
-    numero = models.IntegerField(default=0)
     points = models.IntegerField(default=0)
+    difficulte = models.IntegerField(default=0)
 
     def __str__(self):
         return self.titre

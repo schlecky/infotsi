@@ -2,20 +2,22 @@
 
 {% block contenu %}
 <h1>Épreuve {{ epreuve.numero }}</h1>
-<p>{{ epreuve.enonce | safe  }}</p>
+{{ epreuve.enonce | safe  }}
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 <form action="{% url 'challenge:ajouteCode' epreuve.id %}" method="post" onsubmit="copyCode()">
   {% csrf_token %}
   <div id="editor"></div>
-  <textarea name="code" id='code' style="display: none;"> </textarea> 
+  <textarea name="code" id='code' style="display: none;">{{code|safe}} </textarea> 
   <input type="submit" value="soumettre"/>
 </form>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.getSession().setMode("ace/mode/python");
     var textarea = document.getElementById("code");
+    editor.setTheme("ace/theme/clouds");
+    editor.getSession().setMode("ace/mode/python");
+    editor.setValue(textarea.value);
+    editor.clearSelection();
     function copyCode(){
       textarea.value = editor.getSession().getValue();
     } 
