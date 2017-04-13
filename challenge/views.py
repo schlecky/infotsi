@@ -65,7 +65,7 @@ def codeScore(code, epreuve_id):
     epreuve = get_object_or_404(Epreuve, pk=epreuve_id)
 
     def runCode(q, code, testCode):
-        exec testCode in globals(), locals()
+        exec(testCode, globals(), locals())
         try:
             score, message = scoreFunc(code)
             q.put(score)
