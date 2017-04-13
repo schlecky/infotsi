@@ -28,7 +28,7 @@ SECRET_KEY = '((p7!ra7ng6b)5)jf3cuz^2wa@8c8@dr_g5!#8$-#vp(32zy%!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['tsitroyes.pythonanywhere.com']
+ALLOWED_HOSTS = ['tsitroyes.pythonanywhere.com','localhost']
 
 
 # Application definition

@@ -65,14 +65,15 @@ def codeScore(code, epreuve_id):
     epreuve = get_object_or_404(Epreuve, pk=epreuve_id)
 
     def runCode(q, code, testCode):
-        exec(testCode, globals(), locals())
+        print(testCode)
+        exec(testCode, globals())
         try:
             score, message = scoreFunc(code)
             q.put(score)
             q.put(message)
         except Exception as e:
             q.put(-1)
-            print(e)
+            print(str(e))
             q.put(str(e))
 
 
