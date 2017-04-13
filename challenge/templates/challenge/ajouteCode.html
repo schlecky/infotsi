@@ -2,15 +2,26 @@
 {% block contenu %}
   <h1>Résultat de l'épreuve {{ epreuve.numero }}</h1>
   {% if score > 0 %}
-  <p>Épreuve réussie ! </p>
-  <p>Score de l'épreuve : {{ score }}</p>
-  <p>Votre score total : {{ scoreTot }}</p>
-  {% elif score == 0 %}
-  <p>La solution fournie est incorrecte <a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
-  {% elif score == -2 %}
-  <p>Votre programme met trop de temps à s'executer, il ne peut pas être jugé mais il contient probablement une erreur. <a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
-  {% elif score == -1 %}
-  <p>Votre programme contient une erreur de syntaxe, vérifiez le code. <a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
+  <p class='succes'><i class='fa fa-star'></i>Épreuve réussie !<i class='fa fa-star'></i> </p>
+  <p>Cette épreuve vous rapporte <i class='fa fa-star smaller'></i>{{ score }}</p>
+  <p>Au total vous avez <i class='fa fa-star smaller'></i>{{ scoreTot }}</p>
+  {% else %}
+  <p class='echec'>Échec !</p>
+    {% if score == 0 %}
+    <p>La solution fournie est incorrecte : </p>
+    <p>{{ message|safe }}</p>
+  
+    <p><a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
+    {% elif score == -2 %}
+    <p>Votre programme met trop de temps à s'executer, il ne peut pas être jugé mais il contient probablement une erreur.</p>
+
+    <p><a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
+    {% elif score == -1 %}
+    <p>Votre programme contient une erreur de syntaxe, vérifiez le code.</p>
+    <p class='syntax-error'>{{ message | safe}}</p>
+    <p><a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
   {% endif %}
+  {% endif %}
+  <a href={% url 'challenge:accueil'%}>Retourner à la liste des épreuves</a>
 
   {% endblock %}

@@ -20,6 +20,7 @@ class Epreuve(models.Model):
 class Etudiant(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
+    estClasse = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.last_name

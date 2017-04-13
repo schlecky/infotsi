@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from .models import Epreuve, Code, Etudiant
-from threading import Thread
 from multiprocessing import Process, Queue
 import queue as OQueue
+
 
 def index(request):
     return HttpResponse("Page de challenge")
@@ -22,10 +22,9 @@ def ajouteCode(request, epreuve_id):
         if 'code' not in request.POST:
             return redirect('challenge:accueil')
         code = request.POST['code']
-        score = codeScore(code, epreuve_id)
+        score, message = codeScore(code, epreuve_id)
         etud = request.user.etudiant
         e = Epreuve.objects.get(id=epreuve_id)
-        #if(score > 0):
         c, created = Code.objects.get_or_create(epreuve=e,
                                                 etudiant=etud)
         if created or score > c.score:
@@ -38,6 +37,7 @@ def ajouteCode(request, epreuve_id):
         return render(request, 'challenge/ajouteCode.html',
                       {'epreuve': e,
                        'score': score,
+                       'message': message,
                        'scoreTot': etud.score,
                        'listeJoueurs': listeJoueurs()})
 
@@ -67,34 +67,43 @@ def codeScore(code, epreuve_id):
     def runCode(q, code, testCode):
         exec testCode in globals(), locals()
         try:
-            score = scoreFunc(code)
+            score, message = scoreFunc(code)
             q.put(score)
+            q.put(message)
         except Exception as e:
             q.put(-1)
             print(e)
+            q.put(str(e))
+
 
     q = Queue()
     process = Process(target=runCode, args=(q, code, epreuve.test))
     process.start()
     try:
         score = q.get(True, 3)
+        message = q.get(True, 3)
     except OQueue.Empty:
         score = -2
+        message = ""
         process.terminate()
 
-    return score
+    return score, message
 
 
 def classement(etudiant):
-    l = list(Etudiant.objects.all().order_by('-score'))
-    rang = l.index(etudiant)+1
-    total = len(l)
+    if(etudiant.estClasse):
+        l = list(Etudiant.objects.filter(estClasse=True).order_by('-score'))
+        rang = l.index(etudiant)+1
+        total = len(l)
+    else:
+        rang=-1
+        total=-1
     return {'pos': rang, "tot": total}
 
 
 def listeJoueurs():
     joueurs = []
-    for e in Etudiant.objects.all().order_by('-score'):
+    for e in Etudiant.objects.all().filter(estClasse=True).order_by('-score'):
         joueurs.append({
             'id': e.id,
             'first_name': e.user.first_name,
@@ -103,6 +112,7 @@ def listeJoueurs():
         }
         )
     return joueurs
+
 
 def accueilView(request):
     if request.user.is_authenticated:
@@ -149,3 +159,9 @@ def loginView(request):
             return render(request, 'challenge/login.html', {'message': "echec"})
     else:
         return render(request, 'challenge/login.html')
+
+
+def logoutView(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return loginView(request)

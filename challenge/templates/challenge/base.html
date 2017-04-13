@@ -10,6 +10,13 @@
 
 <header>
   <h1> <a href={% url 'challenge:accueil'%}> Challenge informatique TSI  </a></h1> 
+  <div id='user_div'>
+    {% if user.is_authenticated %}
+    <i class="fa fa-user" aria-hidden="true"></i>{{ user.first_name }} {{ user.last_name }}<a href={% url 'challenge:logoutView' %}><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+    {% else %}
+    <a href={% url 'challenge:loginView' %}>Se connecter<i class="fa fa-sign-in" aria-hidden="true"></i></a>
+    {% endif %}
+  </div>
 </header>
 
 <div id='page'>
@@ -18,7 +25,12 @@
 {% with score=user.etudiant.score %}
 <p>Bonjour {{ user.first_name }},</p>
 
+{% if user.etudiant.estClasse %}
 <p>Avec {{ score }} point{{ score|pluralize }}, ton classement actuel est {{ classement.pos }}/{{ classement.tot }}. Il te reste {{ statEpreuves.restantes }} épreuve{{ statEpreuves.restantes|pluralize }} à tenter.</p>
+{% else %}
+<p> Tu ne fais pas partie du classement </p>
+{% endif %}
+
 
 <h1>Épreuves</h1>
 <ul class='fa-ul'>
@@ -39,12 +51,14 @@
 </section>
 
 <aside id='joueurs'>
+{% if user.is_authenticated%}
 <h1>Participants</h1>
 <ul class=fa-ul>
 {% for j in listeJoueurs %}
 <li>{{ forloop.counter }} &ndash;{{ j.first_name }} {{ j.last_name }} (<i class="fa fa-star smaller"></i>{{ j.score }}) </li>
 {% endfor %}
 </ul>
+{% endif %}
 </aside>
 <div>
 

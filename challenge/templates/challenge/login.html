@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
-<title>Authentification</title>
-<head>
-<style type="text/css" media="screen">
-    #editor { 
-      height:275px;
-      width:70%;
-    }
-</style>
-</head>
-<body>
+{% extends "challenge/base.html" %}
+
+{% block contenu %}
 <h1>Authentification</h1>
 {% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
 <p>Entrer vos identifiant et mot de passe</p>
@@ -21,5 +12,4 @@
   <input type="password" placeholder="Mot de passe" name="password" required>
   <input type="submit" value="Se connecter"/>
 </form>
-</body>
-</html>
+{% endblock %}
