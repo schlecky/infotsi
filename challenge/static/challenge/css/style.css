@@ -137,6 +137,7 @@ p.sortie{
   padding-top:5px;
   padding-bottom:5px;
   border-left: solid #CCC 1px;
+  white-space: pre; 
 }
 
 code {
@@ -145,4 +146,15 @@ code {
     padding: 2px 5px 2px 5px;
     border: solid #CCC 1px;
     border-radius: 3px;
+}
+
+pre{
+  border: solid #CCC 1px;
+  border-radius: 3px;
+  padding:5px;
+  display:inline-block;
+
+}
+pre code{
+  border: none;
 }
