@@ -10,18 +10,19 @@
     {% if score == 0 %}
     <p>La solution fournie est incorrecte : </p>
     <p>{{ message|safe }}</p>
-  
-    <p><a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
+
     {% elif score == -2 %}
     <p>Votre programme met trop de temps à s'executer, il ne peut pas être jugé mais il contient probablement une erreur.</p>
 
-    <p><a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
     {% elif score == -1 %}
     <p>Votre programme contient une erreur de syntaxe, vérifiez le code.</p>
     <p class='syntax-error'>{{ message | safe}}</p>
-    <p><a href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}>essayer encore</a></p>
   {% endif %}
   {% endif %}
-  <a href={% url 'challenge:accueil'%}>Retourner à la liste des épreuves</a>
-
+  <div id="boutons">
+  {% if score < 1 %}
+  <a class="btn" href={% url 'challenge:editeCode' epreuve_id=epreuve.id%}><i class="fa fa-edit" aria-hidden="true"></i>essayer encore</a>
+  {% endif %}
+  <a class="btn" href={% url 'challenge:accueil'%}><i class="fa fa-list" aria-hidden="true"></i>Retourner à la liste des épreuves</a>
+  </div>
   {% endblock %}

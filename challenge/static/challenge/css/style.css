@@ -8,6 +8,27 @@ body{
 a{
   text-decoration:none;
   color:#224;
+  padding:3px;
+}
+
+a:hover{
+  text-decoration:underline;
+}
+
+h1 a:hover{
+  text-decoration:none;
+}
+
+a.btn{
+  padding:10px;
+  border-radius:5px;
+  background: #555;
+  color:#FFF;
+}
+
+a.btn:hover{
+  background: #888;
+  text-decoration:none;
 }
 
 header{
@@ -44,6 +65,34 @@ aside#joueurs h1{
   border-bottom: solid #DDD 1px;
 }
 
+
+span.badge:before{
+  content:"("
+}
+
+span.badge:after{
+  content:")"
+}
+
+span.classement{
+  background:#555;
+  border-radius:10px;
+  font-weight: bold;
+  font-size: 0.9em;
+  padding: 2px 7px;
+  color: #FFF;
+  vertical-align:middle;
+  min-width:40px;
+}
+/*
+span.badge{
+  background:#555;
+  border-radius:10px;
+  font-weight: bold;
+  padding: 2px 7px;
+  color: #F8F8F8;
+}*/
+
 section#contenu{
   float: left;
   width: 700px;
@@ -67,6 +116,14 @@ i.smaller{
 
 i.fa-user{
   margin-right:3px;
+}
+
+i.fa-list{
+  margin-right:4px;
+}
+
+i.fa-edit{
+  margin-right:4px;
 }
 
 div#page{
@@ -96,14 +153,15 @@ header div i.fa{
 p.succes{
   font-size:20px;
   font-weight:lighter;
-  border-radius:5px;
-  background: #AFA;
+  border-radius:10px;
+  background: #080;
   padding:10px;
   text-align:center;
   border:solid #AEA 1px;
   width:500px;
   margin-left:auto;
   margin-right:auto;
+  color:#FFF;
 }
 
 p.succes i{
@@ -114,14 +172,15 @@ p.succes i{
 p.echec{
   font-size:20px;
   font-weight:bold;
-  border-radius:5px;
-  background: #FAA;
+  border-radius:10px;
+  background: #800;
   padding:10px;
   text-align:center;
   border:solid #EAA 1px;
   width:500px;
   margin-left:auto;
   margin-right:auto;
+  color:#FFF;
 }
 
 p.echec i{
@@ -158,4 +217,8 @@ pre{
 }
 pre code{
   border: none;
+}
+
+div#boutons{
+  margin: 30px;
 }

@@ -55,7 +55,7 @@
 <h1>Participants</h1>
 <ul class=fa-ul>
 {% for j in listeJoueurs %}
-<li>{{ forloop.counter }} &ndash;{{ j.first_name }} {{ j.last_name }} (<i class="fa fa-star smaller"></i>{{ j.score }}) </li>
+<li><span class="classement">{{ forloop.counter }}</span> &ndash;{{ j.first_name }} {{ j.last_name }} <span class="badge">{{ j.score }}<i class="fa fa-star smaller"></i></span> </li>
 {% endfor %}
 </ul>
 {% endif %}
