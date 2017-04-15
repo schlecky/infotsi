@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from .models import Epreuve, Code, Etudiant
 from multiprocessing import Process, Queue
 import queue as OQueue
+import builtins as BI
 
 
 def index(request):
@@ -61,11 +62,38 @@ def editeCode(request, epreuve_id):
         return redirect('challenge:loginView')
 
 
+def supFoncInterdites():
+    global mysum, mymax, mymin, mysorted
+    def mysum(liste):
+        raise SyntaxError("Utilisation de la fonction 'sum' interdite !")
+
+    def mymax(liste):
+        raise SyntaxError("Utilisation de la fonction 'max' interdite !")
+
+    def mymin(liste):
+        raise SyntaxError("Utilisation de la fonction 'min' interdite !")
+
+    def mysorted(liste):
+        raise SyntaxError("Utilisation de la fonction 'sorted' interdite !")
+
+    global sum, min, max, sorted
+    sum = mysum
+    min = mymin
+    max = mymax
+    sorted = mysorted
+
+
+def restoreFoncInterdites():
+    global sum,min,max,sorted
+    del max
+    del min
+    del sum
+    del sorted
+
 def codeScore(code, epreuve_id):
     epreuve = get_object_or_404(Epreuve, pk=epreuve_id)
 
     def runCode(q, code, testCode):
-        print(testCode)
         exec(testCode, globals())
         try:
             score, message = scoreFunc(code)
