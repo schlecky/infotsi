@@ -16,7 +16,7 @@
     var textarea = document.getElementById("code");
     editor.setTheme("ace/theme/clouds");
     editor.getSession().setMode("ace/mode/python");
-    editor.setValue(textarea.value);
+    editor.setValue(textarea.value.trim());
     editor.clearSelection();
     function copyCode(){
       textarea.value = editor.getSession().getValue();
