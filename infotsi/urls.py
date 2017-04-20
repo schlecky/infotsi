@@ -20,6 +20,6 @@ from django.views.generic.base import RedirectView
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^challenge/', include('challenge.urls')),
-    #url(r'^.*$', RedirectView.as_view(url='challenge/accueil/',
-    #                                  permanent=False), name='index'),
+    url('^$', RedirectView.as_view(url='challenge/accueil/',
+                                      permanent=False), name='index'),
 ]
