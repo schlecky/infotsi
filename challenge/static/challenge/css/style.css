@@ -150,6 +150,10 @@ header div i.fa{
   margin-left:9px;
 }
 
+p.important{
+    color:#D00;
+}
+
 p.succes{
   font-size:20px;
   font-weight:lighter;

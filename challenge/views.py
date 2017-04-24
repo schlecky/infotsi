@@ -28,7 +28,7 @@ def ajouteCode(request, epreuve_id):
         e = Epreuve.objects.get(id=epreuve_id)
         c, created = Code.objects.get_or_create(epreuve=e,
                                                 etudiant=etud)
-        if created or score > c.score:
+        if created or score >= c.score:
             c.code = code
             if score > 0:
                 c.score = score
