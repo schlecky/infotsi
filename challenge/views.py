@@ -30,7 +30,10 @@ def ajouteCode(request, epreuve_id):
                                                 etudiant=etud)
         if created or score > c.score:
             c.code = code
-            c.score = score
+            if score > 0:
+                c.score = score
+            else:
+                c.score = 0
             c.save()
 
             majScoreEtudiant(etud)
