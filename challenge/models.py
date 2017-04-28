@@ -14,7 +14,10 @@ class Epreuve(models.Model):
     difficulte = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.titre
+        return "*"*self.difficulte+self.titre
+
+    class Meta:
+        order_with_respect_to = 'difficulte'
 
 
 class Etudiant(models.Model):
@@ -45,4 +48,4 @@ class Code(models.Model):
     score = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.code[:20]
+        return str(self.epreuve)+"-"+self.etudiant.user.username
