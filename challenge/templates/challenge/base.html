@@ -28,7 +28,7 @@
 {% if user.etudiant.estClasse %}
 <p>Avec {{ score }} point{{ score|pluralize }}, ton classement actuel est {{ classement.pos }}/{{ classement.tot }}. Il te reste {{ statEpreuves.restantes }} épreuve{{ statEpreuves.restantes|pluralize }} à tenter.</p>
 {% else %}
-<p>Tu as au total {{ score }} point{{ score|pluralize }}. Il te reste  Tu ne fais pas partie du classement. Il te reste {{ statEpreuves.restantes }} épreuve{{ statEpreuves.restantes|pluralize }} à tenter </p>
+<p>Tu as au total {{ score }} point{{ score|pluralize }}. Tu ne fais pas partie du classement. Il te reste {{ statEpreuves.restantes }} épreuve{{ statEpreuves.restantes|pluralize }} à tenter </p>
 {% endif %}
 
 
