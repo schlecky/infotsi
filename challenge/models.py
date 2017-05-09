@@ -26,7 +26,7 @@ class Etudiant(models.Model):
     estClasse = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.user.last_name
+        return self.user.last_name+" "+self.user.first_name
 
 
 @receiver(post_save, sender=User)

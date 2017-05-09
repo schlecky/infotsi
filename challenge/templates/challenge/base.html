@@ -22,14 +22,13 @@
 <div id='page'>
 <section id='contenu'>
 {% block contenu %}
-<p class="important"> En raison d'un problème technique les scores ont été réinitialisés... Il faut recommencer :-(</p>
 {% with score=user.etudiant.score %}
 <p>Bonjour {{ user.first_name }},</p>
 
 {% if user.etudiant.estClasse %}
 <p>Avec {{ score }} point{{ score|pluralize }}, ton classement actuel est {{ classement.pos }}/{{ classement.tot }}. Il te reste {{ statEpreuves.restantes }} épreuve{{ statEpreuves.restantes|pluralize }} à tenter.</p>
 {% else %}
-<p> Tu ne fais pas partie du classement </p>
+<p>Tu as au total {{ score }} point{{ score|pluralize }}. Il te reste  Tu ne fais pas partie du classement. Il te reste {{ statEpreuves.restantes }} épreuve{{ statEpreuves.restantes|pluralize }} à tenter </p>
 {% endif %}
 
 
