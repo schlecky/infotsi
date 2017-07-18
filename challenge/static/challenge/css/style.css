@@ -154,6 +154,12 @@ p.important{
     color:#D00;
 }
 
+span.Attention{
+    border-bottom : solid 1px black;
+
+}
+
+
 p.succes{
   font-size:20px;
   font-weight:lighter;
