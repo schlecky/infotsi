@@ -24,6 +24,20 @@ class Etudiant(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
     estClasse = models.BooleanField(default=True)
+    CPGE1 = 0
+    CPGE2 = 1
+    ANCIENS = 2
+    PROFS = 3
+    AUTRE = 4
+    choixGroupes = (
+            (CPGE1, "CPGE 1"),
+            (CPGE2, "CPGE 2"),
+            (ANCIENS, "Anciens"),
+            (PROFS, "Profs"),
+            (AUTRE, "Autre"),
+            )
+    groupe = models.IntegerField(choices = choixGroupes, default=CPGE1)
+
 
     def __str__(self):
         return self.user.last_name+" "+self.user.first_name
