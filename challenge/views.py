@@ -43,7 +43,7 @@ def ajouteCode(request, epreuve_id):
                        'score': score,
                        'message': message,
                        'scoreTot': etud.score,
-                       'listeJoueurs': listeJoueurs()})
+                       'listeJoueurs': listeJoueurs(etud.groupe)})
 
 
 def editeCode(request, epreuve_id):
@@ -58,7 +58,7 @@ def editeCode(request, epreuve_id):
             c = ""
         return render(request, 'challenge/editecode.html',
                       {'epreuve': epreuve,
-                       'listeJoueurs': listeJoueurs(),
+                       'listeJoueurs': listeJoueurs(request.user.etudiant.groupe),
                        'code': c,
                        })
     else:
@@ -124,7 +124,7 @@ def codeScore(code, epreuve_id):
 
 def classement(etudiant):
     if(etudiant.estClasse):
-        l = list(Etudiant.objects.filter(estClasse=True).order_by('-score'))
+        l = list(Etudiant.objects.filter(estClasse=True).filter(groupe=etudiant.groupe).order_by('-score'))
         rang = l.index(etudiant)+1
         total = len(l)
     else:
@@ -133,13 +133,18 @@ def classement(etudiant):
     return {'pos': rang, "tot": total}
 
 
-def listeJoueurs():
+def listeJoueurs(grp):
     joueurs = []
-    for e in Etudiant.objects.all().filter(estClasse=True).order_by('-score'):
+    for e in Etudiant.objects.all().filter(groupe=grp).order_by('-score'):
+        if(e.estDoublePrenom):
+            init = e.user.last_name[0:2]+"."
+        else:
+            init = ""
         joueurs.append({
             'id': e.id,
             'first_name': e.user.first_name,
             'last_name': e.user.last_name,
+            'last_name_init': init,
             'score': e.score,
         }
         )
@@ -171,7 +176,7 @@ def accueilView(request):
                        'statEpreuves': statEpreuves,
                        'classement': classement(user.etudiant),
                        'user': user,
-                       'listeJoueurs': listeJoueurs()})
+                       'listeJoueurs': listeJoueurs(user.etudiant.groupe)})
     else:
         return redirect('challenge:loginView')
 

@@ -52,10 +52,10 @@
 
 <aside id='joueurs'>
 {% if user.is_authenticated%}
-<h1>Classement</h1>
+<h1>Classement ({{ user.etudiant.nomGroupe }})</h1>
 <ul class=fa-ul>
 {% for j in listeJoueurs %}
-<li><span class="classement">{{ forloop.counter }}</span> &ndash;{{ j.first_name }} <span class="badge">{{ j.score }}<i class="fa fa-star smaller"></i></span> </li>
+<li><span class="classement">{{ forloop.counter }}</span> &ndash;{{ j.first_name }} <span class="init">{{ j.last_name_init }}</span> <span class="badge">{{ j.score }}<i class="fa fa-star smaller"></i></span> </li>
 {% endfor %}
 </ul>
 {% endif %}
