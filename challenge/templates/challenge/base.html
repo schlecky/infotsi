@@ -50,6 +50,8 @@
 {% endblock %}
 </section>
 
+
+{% block classement %}
 <aside id='joueurs'>
 {% if user.is_authenticated%}
 <h1>Classement ({{ user.etudiant.nomGroupe }})</h1>
@@ -60,7 +62,7 @@
 </ul>
 {% endif %}
 </aside>
-<div>
+{% endblock %}
 
 <footer>
 </footer>

@@ -84,6 +84,13 @@ span.classement{
   vertical-align:middle;
   min-width:40px;
 }
+
+
+div.classement{
+  display:inline-block;
+  vertical-align:top;
+
+}
 /*
 span.badge{
   background:#555;

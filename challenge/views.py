@@ -50,7 +50,7 @@ def editeCode(request, epreuve_id):
     if request.user.is_authenticated:
         epreuve = get_object_or_404(Epreuve, pk=epreuve_id)
         code = Code.objects.filter(epreuve=epreuve,
-                                etudiant=request.user.etudiant)
+                                   etudiant=request.user.etudiant)
         if code:
             code = code.get()
             c = code.code
@@ -151,6 +151,31 @@ def listeJoueurs(grp):
     return joueurs
 
 
+
+def listeGroupes():
+    groupes=[]
+    for g in Etudiant.choixGroupes:
+        grp = g[0]
+        joueurs = []
+        for e in Etudiant.objects.all().filter(groupe=grp).order_by('-score'):
+            if(e.estDoublePrenom):
+                init = e.user.last_name[0:2]+"."
+            else:
+                init = ""
+            joueurs.append({
+                'id': e.id,
+                'first_name': e.user.first_name,
+                'last_name': e.user.last_name,
+                'last_name_init': init,
+                'score': e.score,
+            })
+        groupes.append({
+            'nomGroupe': g[1],
+            'joueurs': joueurs
+        })
+    return groupes
+
+
 def accueilView(request):
     if request.user.is_authenticated:
         user = request.user
@@ -202,3 +227,19 @@ def logoutView(request):
     if request.user.is_authenticated:
         logout(request)
     return loginView(request)
+
+
+
+def classementView(request):
+    if request.user.is_authenticated:
+        user = request.user
+        if user.etudiant.groupe == Etudiant.PROFS:
+
+            return render(request, 'challenge/classements.html',
+                        {'listeGroupes': listeGroupes(),
+                        'user': user,
+                        })
+        else:
+           return redirect('challenge:acceuilView')
+    else:
+        return redirect('challenge:loginView')
