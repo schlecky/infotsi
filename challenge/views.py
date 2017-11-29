@@ -28,15 +28,11 @@ def ajouteCode(request, epreuve_id):
         e = Epreuve.objects.get(id=epreuve_id)
         c, created = Code.objects.get_or_create(epreuve=e,
                                                 etudiant=etud)
-        if created or score >= c.score:
-            c.code = code
-            if score > 0:
-                c.score = score
-            else:
-                c.score = 0
-            c.save()
+        c.code = code
+        c.score = score
+        c.save()
 
-            majScoreEtudiant(etud)
+        majScoreEtudiant(etud)
 
         return render(request, 'challenge/ajouteCode.html',
                       {'epreuve': e,
@@ -103,7 +99,7 @@ def codeScore(code, epreuve_id):
             q.put(score)
             q.put(message)
         except Exception as e:
-            q.put(-1)
+            q.put(0)
             print(str(e))
             q.put(str(e))
 
@@ -115,8 +111,8 @@ def codeScore(code, epreuve_id):
         score = q.get(True, 3)
         message = q.get(True, 3)
     except OQueue.Empty:
-        score = -2
-        message = ""
+        score = 0
+        message = "<p>Votre programme met trop de temps à se terminer</p>"
         process.terminate()
 
     return score, message
