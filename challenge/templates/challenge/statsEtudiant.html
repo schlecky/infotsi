@@ -1,0 +1,25 @@
+{% extends "challenge/base.html" %}
+
+{% block contenu %}
+<h1>Statistiques pour {{ etudiant.user.first_name }} {{ etudiant.user.last_name }} </h1>
+
+<ul class='fa-ul'>
+{% for e in listeEpreuves %}
+<li>
+  {% if e.reussie == True %}
+  <i class="fa fa-check-square-o" aria-hidden="true"></i>
+  {% else %}
+  <i class="fa fa-square-o" aria-hidden="true"></i>
+  {% endif %}
+  <a href={% url 'challenge:statistiques' etudiant_id=etudiant.id epreuve_id=e.id%}>{{ e.titre }}</a> 
+  {% for i in e.difficulte %}<i class="fa fa-star smaller" aria-hidden="true"></i>{% endfor %}
+   </li>
+{% endfor %}
+</ul>
+
+
+{% endblock %}
+
+{% block classement %}
+{{ code.code }}
+{% endblock %}
