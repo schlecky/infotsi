@@ -53,8 +53,8 @@ except NameError:
             to generate your secret key!' % SECRET_FILE)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+# DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['tsitroyes.pythonanywhere.com','localhost','127.0.0.1']
 
