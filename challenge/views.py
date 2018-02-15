@@ -17,6 +17,77 @@ def majScoreEtudiant(etud):
     etud.score = sum(c.score for c in codes)
     etud.save()
 
+def verifieCodes():
+    codes = Code.objects.all()
+    for c in codes:
+        score, m = codeScore(c,c.epreuve.id)
+        c.score = score
+        c.save()
+
+    etudiants = Etudiant.objects.all()
+    for e in etudiants:
+        majScoreEtudiant(e)
+
+def administrationView(request):
+    if request.user.is_authenticated:
+        user = request.user
+        if user.etudiant.groupe == Etudiant.PROFS:
+            return render(request, 'challenge/administration.html',
+                        {'user': user,
+                        })
+        else:
+           return redirect('challenge:acceuilView')
+    else:
+        return redirect('challenge:loginView')
+
+def adminVerifieCodes(request):
+    if request.user.is_authenticated:
+        user = request.user
+        if user.etudiant.groupe == Etudiant.PROFS:
+            verifieCodes()
+            return render(request, 'challenge/administration.html',
+                        {'user': user,
+                        })
+        else:
+           return redirect('challenge:acceuilView')
+    else:
+        return redirect('challenge:loginView')
+
+def adminStatsEtudiant(request, etudiant_id, epreuve_id):
+    if request.user.is_authenticated:
+        user = request.user
+        if user.etudiant.groupe == Etudiant.PROFS:
+            etud = Etudiant.objects.get(id=etudiant_id)
+            codes = Code.objects.filter(etudiant=etud)
+            c = Code.objects.filter(etudiant=etud).get(epreuve=epreuve_id)
+            epreuves = Epreuve.objects.all().order_by('difficulte')
+            listeEpreuves = []
+            for e in epreuves:
+                if codes.filter(epreuve=e) and codes.get(epreuve=e).score>0:
+                    r = True
+                else:
+                    r = False
+                listeEpreuves.append({
+                    'id': e.id,
+                    'reussie': r,
+                    'points': e.points,
+                    'titre': e.titre,
+                    'difficulte': list(range(e.difficulte)),
+                })
+
+            return render(request, 'challenge/statsEtudiant.html',
+                        {'user': user,
+                         'etudiant': etud,
+                         'listeEpreuves': listeEpreuves,
+                         'code' : c,
+                        })
+        else:
+           return redirect('challenge:acceuilView')
+    else:
+        return redirect('challenge:loginView')
+
+
+
 
 def ajouteCode(request, epreuve_id):
     if request.user.is_authenticated:

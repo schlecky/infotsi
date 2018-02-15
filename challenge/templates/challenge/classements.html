@@ -8,7 +8,7 @@
 <h1>{{ g.nomGroupe }}</h1>
 <ul class=fa-ul>
     {% for j in g.joueurs %}
-<li><span class="classement">{{ forloop.counter }}</span> &ndash;{{ j.first_name }} <span class="init">{{ j.last_name_init }}</span> <span class="badge">{{ j.score }}<i class="fa fa-star smaller"></i></span> </li>
+    <li><span class="classement">{{ forloop.counter }}</span> &ndash;<a href=/challenge/administration/statsEtudiant/{{ j.id }}/1/>{{ j.first_name }}</a> <span class="init">{{ j.last_name_init }}</span> <span class="badge">{{ j.score }}<i class="fa fa-star smaller"></i></span> </li>
 {% endfor %}
 </ul>
 </div>
