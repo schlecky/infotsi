@@ -244,3 +244,26 @@ pre code{
 div#boutons{
   margin: 30px;
 }
+
+#codeStats{
+  display:block;
+  position:fixed;
+  right: 50px;
+  top: 150px;
+  height:400px;
+  overflow: visible;
+}
+
+#codeStats #editor{
+ width:500px;
+ height:400px;
+}
+
+#codeStats h1{
+  font-size: 14px;
+}
+
+#codeStats p{
+  font-size: 14px;
+  font-weight: lighter;
+}

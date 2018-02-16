@@ -1,6 +1,7 @@
 {% extends "challenge/base.html" %}
 
 {% block contenu %}
+<a href=/challenge/administration/classements/>Revenir au classement</a>
 <h1>Statistiques pour {{ etudiant.user.first_name }} {{ etudiant.user.last_name }} </h1>
 
 <ul class='fa-ul'>
@@ -21,5 +22,24 @@
 {% endblock %}
 
 {% block classement %}
+<div id="codeStats">
+<h1>{{ epreuve.titre }}</h1>
+<div id="editor">
 {{ code.code }}
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    var textarea = document.getElementById("code");
+    editor.setTheme("ace/theme/clouds");
+    editor.getSession().setMode("ace/mode/python");
+    editor.setValue(textarea.value.trim());
+    editor.clearSelection();
+    function copyCode(){
+      textarea.value = editor.getSession().getValue();
+    } 
+</script>
+
+<p> Score : {{ code.score }}</p>
+</div>
 {% endblock %}

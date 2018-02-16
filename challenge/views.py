@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
 from .models import Epreuve, Code, Etudiant
 from multiprocessing import Process, Queue
 import queue as OQueue
@@ -20,7 +21,7 @@ def majScoreEtudiant(etud):
 def verifieCodes():
     codes = Code.objects.all()
     for c in codes:
-        score, m = codeScore(c,c.epreuve.id)
+        score, m = codeScore(c.code,c.epreuve.id)
         c.score = score
         c.save()
 
@@ -32,6 +33,8 @@ def administrationView(request):
     if request.user.is_authenticated:
         user = request.user
         if user.etudiant.groupe == Etudiant.PROFS:
+            if "verifieCodes" in request.path:
+                verifieCodes()
             return render(request, 'challenge/administration.html',
                         {'user': user,
                         })
@@ -59,7 +62,10 @@ def adminStatsEtudiant(request, etudiant_id, epreuve_id):
         if user.etudiant.groupe == Etudiant.PROFS:
             etud = Etudiant.objects.get(id=etudiant_id)
             codes = Code.objects.filter(etudiant=etud)
-            c = Code.objects.filter(etudiant=etud).get(epreuve=epreuve_id)
+            try:
+                c = Code.objects.filter(etudiant=etud).get(epreuve=epreuve_id)
+            except ObjectDoesNotExist:
+                c = {'code':'Aucun code'}
             epreuves = Epreuve.objects.all().order_by('difficulte')
             listeEpreuves = []
             for e in epreuves:
@@ -74,12 +80,12 @@ def adminStatsEtudiant(request, etudiant_id, epreuve_id):
                     'titre': e.titre,
                     'difficulte': list(range(e.difficulte)),
                 })
-
             return render(request, 'challenge/statsEtudiant.html',
                         {'user': user,
                          'etudiant': etud,
                          'listeEpreuves': listeEpreuves,
                          'code' : c,
+                         'epreuve' : Epreuve.objects.all().get(id=epreuve_id)
                         })
         else:
            return redirect('challenge:acceuilView')
