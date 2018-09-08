@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^challenge/', include('challenge.urls')),
     url('^$', RedirectView.as_view(url='challenge/accueil/',
                                       permanent=False), name='index'),
