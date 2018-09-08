@@ -1,2 +1,5 @@
 *.swp
+secret.txt
+tables15.txt
+test.db
 *.pyc
