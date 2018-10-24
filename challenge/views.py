@@ -253,7 +253,7 @@ def accueilView(request):
     if request.user.is_authenticated:
         user = request.user
         codes = Code.objects.filter(etudiant=user.etudiant)
-        epreuves = Epreuve.objects.all().order_by('difficulte')
+        epreuves = Epreuve.objects.all().order_by('difficulte','id')
         listeEpreuves = []
         for e in epreuves:
             if codes.filter(epreuve=e) and codes.get(epreuve=e).score>0:
@@ -262,6 +262,7 @@ def accueilView(request):
                 r = False
             listeEpreuves.append({
                 'id': e.id,
+                'numero': str(e.difficulte)+".{:02d}".format(len(epreuves.filter(difficulte=e.difficulte, id__lte=e.id))),
                 'reussie': r,
                 'points': e.points,
                 'titre': e.titre,

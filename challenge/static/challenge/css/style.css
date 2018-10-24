@@ -267,3 +267,9 @@ div#boutons{
   font-size: 14px;
   font-weight: lighter;
 }
+
+span.numero{
+  display : inline-block;
+  text-align : right;
+  min-width : 30px;
+}

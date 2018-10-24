@@ -41,7 +41,7 @@
   {% else %}
   <i class="fa fa-square-o" aria-hidden="true"></i>
   {% endif %}
-  <a href={% url 'challenge:editeCode' epreuve_id=e.id%}>{{ e.titre }}</a> 
+  <a href={% url 'challenge:editeCode' epreuve_id=e.id%}><span class=numero>{{ e.numero }}</span> {{ e.titre }}</a> 
   {% for i in e.difficulte %}<i class="fa fa-star smaller" aria-hidden="true"></i>{% endfor %}
    </li>
 {% endfor %}
