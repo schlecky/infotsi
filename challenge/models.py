@@ -66,3 +66,10 @@ class Code(models.Model):
 
     def __str__(self):
         return str(self.epreuve)+"-"+self.etudiant.user.username
+
+class Notification(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    message = models.TextField(default="")
+    def __str__(self):
+        return str(self.date)+"-"+self.message
+
