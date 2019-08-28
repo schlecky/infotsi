@@ -3,10 +3,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Epreuve, Code, Etudiant
+from .models import Epreuve, Code, Etudiant, Notification
 from multiprocessing import Process, Queue
 import queue as OQueue
 import builtins as BI
+from datetime import datetime, timedelta
+
 
 
 def index(request):
@@ -28,6 +30,18 @@ def verifieCodes():
     etudiants = Etudiant.objects.all()
     for e in etudiants:
         majScoreEtudiant(e)
+
+def notifView(request):
+    time_threshold = datetime.now() - timedelta(minutes=1)
+    # Supprime les notifications plus vieilles que 1 minute
+    old_notif = Notification.objects.filter(date__lt=time_threshold).delete()
+    notifs = Notification.objects.all()
+    result = "{\"notifications\":["
+    for n in notifs:
+        result+="{{\"date\":\"{}\",\"message\":\"{}\"}}".format(n.date, n.message)
+    result+="]}"
+
+    return HttpResponse(result, content_type="application/json")
 
 def administrationView(request):
     if request.user.is_authenticated:
