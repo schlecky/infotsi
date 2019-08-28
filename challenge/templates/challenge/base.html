@@ -63,8 +63,46 @@
 {% endif %}
 </aside>
 {% endblock %}
-
+</div>
 <footer>
+  <div id=notification>
+  </div>
 </footer>
+<script charset="utf-8">
+
+dejaAffichees = [];
+notifications = document.getElementById("notification");
+
+
+
+function checkNotifications(){
+  var xhttp = new XMLHttpRequest(); 
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        data = JSON.parse(this.responseText);
+        for(i=0; i<data.notifications.length; i++){
+          if (!(dejaAffichees.includes(data.notifications[i].date))){
+            dejaAffichees.push(data.notifications[i].date);
+            notif = document.createElement("DIV");
+            notif.className = "notif";
+            notif.innerHTML = data.notifications[i].message;
+            notif.style.opacity = 0;
+            notifications.appendChild(notif);
+            setTimeout(function(){notif.style.opacity = 1},10);
+            setTimeout(function(){notif.style.opacity=0;},5000);
+            setTimeout(function(){notifications.removeChild(notif);},6000);
+          }
+        }
+      }
+  };
+  var getUrl = window.location;
+  var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" ;
+  xhttp.open("GET",baseUrl+"challenge/notifications/", true);
+  xhttp.send();
+
+}
+
+setInterval(checkNotifications, 2000);
+</script>
 </body>
 </html>

@@ -38,7 +38,9 @@ def notifView(request):
     notifs = Notification.objects.all()
     result = "{\"notifications\":["
     for n in notifs:
-        result+="{{\"date\":\"{}\",\"message\":\"{}\"}}".format(n.date, n.message)
+        result+="{{\"date\":\"{}\",\"message\":\"{}\"}},".format(n.date, n.message)
+    if len(notifs)>0:
+        result=result[:-1]
     result+="]}"
 
     return HttpResponse(result, content_type="application/json")
@@ -119,12 +121,19 @@ def ajouteCode(request, epreuve_id):
         e = Epreuve.objects.get(id=epreuve_id)
         c, created = Code.objects.get_or_create(epreuve=e,
                                                 etudiant=etud)
+        # Si le score de cette épreuve est supérieur au précédent, notification
+        if score>c.score:
+            n = Notification()
+            n.date = datetime.now()
+            n.message = "{} a réussi l'épreuve \\\"{}\\\" ({}<i class=\\\"fa fa-star smaller\\\" aria-hidden=\\\"true\\\"></i>)".format(
+                    etud.user.first_name, e.titre, score)
+            n.save()
         c.code = code
         c.score = score
         c.save()
 
         majScoreEtudiant(etud)
-
+        
         return render(request, 'challenge/ajouteCode.html',
                       {'epreuve': e,
                        'score': score,

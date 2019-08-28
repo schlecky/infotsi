@@ -273,3 +273,24 @@ span.numero{
   text-align : right;
   min-width : 30px;
 }
+
+#notification{
+  position:fixed;
+  right:0;
+  bottom:0;
+}
+
+.notif{
+  padding: 1rem;
+  background: #ccf0cc;
+  box-shadow: 2px 4px 3px rgba(0,0,0,0.2);
+  border-color: #2eac05;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  font-size:0.7rem;
+  width:200px;
+  transition: opacity 0.5s;
+}
