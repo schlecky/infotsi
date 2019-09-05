@@ -32,7 +32,7 @@ def verifieCodes():
         majScoreEtudiant(e)
 
 def notifView(request):
-    time_threshold = datetime.now() - timedelta(minutes=1)
+    time_threshold = datetime.now() - timedelta(seconds=5)
     # Supprime les notifications plus vieilles que 1 minute
     old_notif = Notification.objects.filter(date__lt=time_threshold).delete()
     notifs = Notification.objects.all()
@@ -58,6 +58,23 @@ def administrationView(request):
            return redirect('challenge:acceuilView')
     else:
         return redirect('challenge:loginView')
+
+def adminVerifieCode(request, etudiant_id, epreuve_id):
+    if request.user.is_authenticated:
+        user = request.user
+        if user.etudiant.groupe == Etudiant.PROFS:
+            c = Code.objects.filter(etudiant=etudiant_id).get(epreuve=epreuve_id)
+            score, m = codeScore(c.code,c.epreuve.id)
+            c.score = score
+            c.save()
+            etudiant = Etudiant.objects.get(id=etudiant_id)
+            majScoreEtudiant(etudiant)
+            return adminStatsEtudiant(request, etudiant_id, epreuve_id)
+        else:
+           return redirect('challenge:acceuilView')
+    else:
+        return redirect('challenge:loginView')
+
 
 def adminVerifieCodes(request):
     if request.user.is_authenticated:

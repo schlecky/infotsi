@@ -266,6 +266,14 @@ div#boutons{
 #codeStats p{
   font-size: 14px;
   font-weight: lighter;
+  display:inline;
+}
+
+a.button{
+    font-size:14px;
+    font-weight:lighter;
+    border:solid 1px grey;
+    margin-left:10px;
 }
 
 span.numero{

@@ -41,5 +41,6 @@
 </script>
 
 <p> Score : {{ code.score }}</p>
+<a class="btn" href={% url 'challenge:verifieCode' etudiant_id=etudiant.id epreuve_id=epreuve.id %}>MAJ score</a>
 </div>
 {% endblock %}
