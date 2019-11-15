@@ -34,8 +34,8 @@ def verifieCodes():
 def notifView(request):
     time_threshold = datetime.now() - timedelta(seconds=5)
     # Supprime les notifications plus vieilles que 1 minute
-    old_notif = Notification.objects.filter(date__lt=time_threshold).delete()
-    notifs = Notification.objects.all()
+    # old_notif = Notification.objects.filter(date__lt=time_threshold).delete()
+    notifs = Notification.objects.filter(date__gt=time_threshold)
     result = "{\"notifications\":["
     for n in notifs:
         result+="{{\"date\":\"{}\",\"message\":\"{}\"}},".format(n.date, n.message)
@@ -353,6 +353,46 @@ def classementView(request):
                         {'listeGroupes': listeGroupes(),
                         'user': user,
                         })
+        else:
+           return redirect('challenge:acceuilView')
+    else:
+        return redirect('challenge:loginView')
+
+def evolutionScores():
+    codesTSI1 = Code.objects.filter(etudiant__groupe=Etudiant.CPGE1).order_by('date')
+    codesTSI2 = Code.objects.filter(etudiant__groupe=Etudiant.CPGE2).order_by('date')
+    dataTSI2 = []
+    dataTSI1 = []
+    labelTSI1 = []
+    labelTSI2 = []
+    S=0
+    for c in codesTSI1:
+        S += c.score
+        dataTSI1.append({'t':c.date.isoformat(), 'y':S})
+        labelTSI1.append(c.etudiant.user.first_name+" "+c.etudiant.user.last_name+" : "+c.epreuve.titre)
+    print(dataTSI1)
+    S=0
+    for c in codesTSI2:
+        S += c.score
+        dataTSI2.append({'t':c.date.isoformat(), 'y':S})
+        labelTSI2.append(c.etudiant.user.first_name+" "+c.etudiant.user.last_name+" : "+c.epreuve.titre)
+    return {'dataTSI1':dataTSI1, 'dataTSI2':dataTSI2, 'labelTSI1':labelTSI1, 'labelTSI2':labelTSI2}
+
+def derniersEvenements():
+    notifs = Notification.objects.order_by('-date')[:10]
+    messages = []
+    for n in notifs:
+        messages.append(n.message.replace("\\\"","\""))
+    print(messages)
+    return messages
+
+def historiqueView(request):
+    if request.user.is_authenticated:
+        user = request.user
+        if user.etudiant.groupe == Etudiant.PROFS:
+            return render(request, 'challenge/historique.html',
+                        {'data': evolutionScores(),
+                         'messages': derniersEvenements()})
         else:
            return redirect('challenge:acceuilView')
     else:

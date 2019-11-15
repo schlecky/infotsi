@@ -1,0 +1,65 @@
+{% extends "challenge/base.html" %}
+
+{% block contenu %}
+<h1>Évolution des scores :</h1>
+
+<div class=evolution_scores>
+  <canvas id="graphScores"> 
+  </canvas>
+  <form>
+    Début : <input id="dateDebut" type="date" onchange="dateDebutChange(event);"/>
+    yMin : <input id="yMin" type="number" onchange="yMinChange(event);"/>
+  </form>
+  {% load static %}
+  <script src="{% static 'challenge/js/Chart.bundle.js' %}"></script>
+  <script>
+    data1 = [
+      {% for p in data.dataTSI1 %}
+      {x:"{{ p.t }}", y:{{ p.y }}}, 
+      {% endfor %}
+    ];
+    data2 = [
+      {% for p in data.dataTSI2 %}
+      {x:"{{ p.t }}", y:{{ p.y }}}, 
+      {% endfor %}
+    ];
+    var myLineChart = new Chart(document.getElementById("graphScores"), {
+    "type":"scatter",
+    "data":{
+      "datasets":[
+        {"label":"TSI1","data":data1,"fill":false,showLine:true,"borderColor":"rgb(75, 192, 192)","lineTension":0.1},
+        {"label":"TSI2","data":data2,"fill":false,showLine:true,"borderColor":"rgb(75, 192, 192)","lineTension":0.1}
+      ]
+      },
+    "options":{
+      scales : {
+        xAxes : [{type : 'time', time : {unit:'week', min:"2019-09-01"}}],
+        yAxes : [{ticks:{'beginAtZero':false}}]
+        }
+      }
+    });
+
+    function dateDebutChange(event){
+      myLineChart.options.scales.xAxes[0].time.min = document.getElementById("dateDebut").value;
+      myLineChart.update();
+    }
+    function yMinChange(event){
+      myLineChart.options.scales.yAxes[0].ticks.min = parseInt(document.getElementById("yMin").value);
+      myLineChart.update();
+    }
+  </script>
+</div>
+
+<h1>Derniers événements</h1>
+
+<div class=derniers_evenements>
+  {% for m in messages %}
+  {{ m |safe }} 
+  {% endfor %}
+</div>
+
+
+{% endblock %}
+
+{% block classement %}
+{% endblock %}

@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^administration/$', views.administrationView, name='administration'),
     url(r'^notifications/$', views.notifView, name='notifications'),
     url(r'^administration/classements/$', views.classementView, name='classement'),
+    url(r'^administration/historique/$', views.historiqueView, name='historique'),
     url(r'^administration/verifieCodes/$', views.administrationView, name='administration'),
     url(r'^administration/statsEtudiant/(?P<etudiant_id>[0-9]+)/(?P<epreuve_id>[0-9]+)/$', views.adminStatsEtudiant, name='statistiques'),
     url(r'^administration/verifieCode/(?P<etudiant_id>[0-9]+)/(?P<epreuve_id>[0-9]+)/$', views.adminVerifieCode, name='verifieCode'),
