@@ -30,6 +30,11 @@
 {% else %}
 <p>Tu as au total {{ score }} point{{ score|pluralize }}. Tu ne fais pas partie du classement. Il te reste {{ statEpreuves.restantes }} épreuve{{ statEpreuves.restantes|pluralize }} à tenter </p>
 {% endif %}
+{% if user.etudiant.groupe == user.etudiant.PROFS %}
+<p>
+Comme tu es prof, tu as accès à la section : <a href={% url 'challenge:administration' %}>Administration </a>
+</p>
+{% endif %}
 
 
 <h1>Épreuves</h1>

@@ -6,10 +6,12 @@
 <div class=evolution_scores>
   <canvas id="graphScores"> 
   </canvas>
+  
   <form>
     Début : <input id="dateDebut" type="date" onchange="dateDebutChange(event);"/>
     yMin : <input id="yMin" type="number" onchange="yMinChange(event);"/>
   </form>
+ 
   {% load static %}
   <script src="{% static 'challenge/js/Chart.bundle.js' %}"></script>
   <script>
@@ -47,7 +49,7 @@
       myLineChart.options.scales.yAxes[0].ticks.min = parseInt(document.getElementById("yMin").value);
       myLineChart.update();
     }
-  </script>
+ </script>
 </div>
 
 <h1>Derniers événements</h1>
