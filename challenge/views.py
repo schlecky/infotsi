@@ -390,8 +390,10 @@ def historiqueView(request):
     if request.user.is_authenticated:
         user = request.user
         if user.etudiant.groupe == Etudiant.PROFS:
+            scores = evolutionScores()
             return render(request, 'challenge/historique.html',
-                        {'data': evolutionScores(),
+                        {'data': scores,
+                         'dateDebut': Code.objects.filter(etudiant__groupe=Etudiant.CPGE2).order_by('date')[0].date.strftime("%Y-%m-%d"),
                          'messages': derniersEvenements()})
         else:
            return redirect('challenge:acceuilView')

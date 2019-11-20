@@ -7,10 +7,9 @@
   <canvas id="graphScores"> 
   </canvas>
   
-
   <form onsubmit="formSubmit(); return false;">
-    Début : <input id="dateDebut" type="date" onchange="dateDebutChange(event);" value={{ data.dataTSI1.0.t }})/>
-    yMin : <input id="yMin" type="number" onchange="yMinChange(event);"/>
+    Début : <input id="dateDebut" type="date" onchange="dateDebutChange(event);" value="{{ dateDebut }}"/>
+    yMin : <input id="yMin" type="number" onchange="yMinChange(event);" value="0"/>
   </form>
  
   {% load static %}
