@@ -7,8 +7,9 @@
   <canvas id="graphScores"> 
   </canvas>
   
-  <form>
-    Début : <input id="dateDebut" type="date" onchange="dateDebutChange(event);"/>
+
+  <form onsubmit="formSubmit(); return false;">
+    Début : <input id="dateDebut" type="date" onchange="dateDebutChange(event);" value={{ data.dataTSI1.0.t }})/>
     yMin : <input id="yMin" type="number" onchange="yMinChange(event);"/>
   </form>
  
@@ -29,7 +30,7 @@
     "type":"scatter",
     "data":{
       "datasets":[
-        {"label":"TSI1","data":data1,"fill":false,showLine:true,"borderColor":"rgb(75, 192, 192)","lineTension":0.1},
+        {"label":"TSI1","data":data1,"fill":false,showLine:true,"borderColor":"rgb(255, 92, 92)","lineTension":0.1},
         {"label":"TSI2","data":data2,"fill":false,showLine:true,"borderColor":"rgb(75, 192, 192)","lineTension":0.1}
       ]
       },
@@ -40,6 +41,12 @@
         }
       }
     });
+
+    function formSubmit(){
+      myLineChart.options.scales.xAxes[0].time.min = document.getElementById("dateDebut").value;
+      myLineChart.options.scales.yAxes[0].ticks.min = parseInt(document.getElementById("yMin").value);
+      myLineChart.update();
+    }
 
     function dateDebutChange(event){
       myLineChart.options.scales.xAxes[0].time.min = document.getElementById("dateDebut").value;
