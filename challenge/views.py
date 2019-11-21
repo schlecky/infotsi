@@ -367,15 +367,16 @@ def evolutionScores():
     labelTSI2 = []
     S=0
     for c in codesTSI1:
-        S += c.score
-        dataTSI1.append({'t':c.date.isoformat(), 'y':S})
-        labelTSI1.append(c.etudiant.user.first_name+" "+c.etudiant.user.last_name+" : "+c.epreuve.titre)
-    print(dataTSI1)
+        if c.score > 0:
+            S += c.score
+            dataTSI1.append({'t':c.date.isoformat(), 'y':S})
+            # labelTSI1.append(c.etudiant.user.first_name+" "+c.etudiant.user.last_name+" : "+c.epreuve.titre)
     S=0
     for c in codesTSI2:
-        S += c.score
-        dataTSI2.append({'t':c.date.isoformat(), 'y':S})
-        labelTSI2.append(c.etudiant.user.first_name+" "+c.etudiant.user.last_name+" : "+c.epreuve.titre)
+        if c.score > 0:
+            S += c.score
+            dataTSI2.append({'t':c.date.isoformat(), 'y':S})
+            # labelTSI2.append(c.etudiant.user.first_name+" "+c.etudiant.user.last_name+" : "+c.epreuve.titre)
     return {'dataTSI1':dataTSI1, 'dataTSI2':dataTSI2, 'labelTSI1':labelTSI1, 'labelTSI2':labelTSI2}
 
 def derniersEvenements():
