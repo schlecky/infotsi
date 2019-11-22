@@ -106,7 +106,7 @@
         ligne.appendChild(cmessage);
         new_tbody.appendChild(ligne);
         date = new Date(notifs[i]['date'])
-        cdate.innerHTML = date.getDate()+"/"+date.getMonth()+"/"+date.getDate()+" à "+date.getHours()+":"+date.getMinutes();
+        cdate.innerHTML = date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()+" à "+date.getHours()+":"+date.getMinutes();
         cmessage.innerHTML = notifs[i]['message'];
       }
 
