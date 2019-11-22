@@ -302,3 +302,22 @@ span.numero{
   width:200px;
   transition: opacity 0.5s;
 }
+
+#evenements{
+  display:block;
+  margin-left:30px;
+}
+
+#evenements th, td {
+  padding: 5px;
+  text-align: left;
+}
+
+#evenements th{
+  background-color: #e2e2e2;
+}
+
+#evenements tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+

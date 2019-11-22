@@ -55,17 +55,94 @@
       myLineChart.options.scales.yAxes[0].ticks.min = parseInt(document.getElementById("yMin").value);
       myLineChart.update();
     }
- </script>
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function getDerniersEvenements(n){
+      //Récupère la liste des derniers événements
+      const Http = new XMLHttpRequest();
+      var csrftoken = getCookie('csrftoken');
+      const url='../../notifications/';
+      Http.open("POST", url);
+      Http.responseType = 'json';
+      Http.setRequestHeader("X-CSRFToken",csrftoken);
+      Http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      Http.send("nbNotif="+n.toString()+"&test=rere");
+      Http.onload = function(){
+        notifs = Http.response['notifications'];
+        for(i=0; i<notifs.length; i++){
+          console.log(notifs[i]['date']);
+          console.log(notifs[i]['message']);
+        }
+        majEvenements(notifs);
+      }
+    }
+
+    function majEvenements(notifs){
+      table = document.getElementById("evenements");
+      tbody = table.getElementsByTagName("tbody")[0];
+      var new_tbody = document.createElement("tbody");
+      //tbody = new_tbody;
+      table.replaceChild(new_tbody, tbody);
+      for(i=0; i<notifs.length; i++){
+        ligne = document.createElement("tr");
+        cdate = document.createElement("td");
+        cmessage = document.createElement("td");
+        ligne.appendChild(cdate);
+        ligne.appendChild(cmessage);
+        new_tbody.appendChild(ligne);
+        date = new Date(notifs[i]['date'])
+        cdate.innerHTML = date.getDate()+"/"+date.getMonth()+"/"+date.getDate()+" à "+date.getHours()+":"+date.getMinutes();
+        cmessage.innerHTML = notifs[i]['message'];
+      }
+
+    }
+
+    function selectChanged(){
+      s = document.getElementById('nbNotifSelect');
+      getDerniersEvenements(parseInt(s.value));
+    }
+
+    document.addEventListener('DOMContentLoaded', function(event) {
+      //the event occurred
+      getDerniersEvenements(50);
+    });
+
+   </script>
 </div>
 
 <h1>Derniers événements</h1>
 
 <div class=derniers_evenements>
-  <ul>
-  {% for m in messages %}
-  <li>{{ m |safe }}</li> 
-  {% endfor %}
-  </ul>
+  <table id="evenements">
+  <thead>
+    <tr><th align='left'>Date</th><th align='left'>Événement</th></tr>
+  </thead>
+  <tbody>
+  </tbody>
+  </table>
+  <p> Afficher les 
+  <select id="nbNotifSelect" onchange="selectChanged()">
+    <option value="10">10</option>
+    <option value="50" selected>50</option>
+    <option value="100">100</option>
+    <option value="500">500</option>
+  </select> 
+  derniers événements.
 </div>
 
 

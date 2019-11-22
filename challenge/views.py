@@ -32,10 +32,13 @@ def verifieCodes():
         majScoreEtudiant(e)
 
 def notifView(request):
-    time_threshold = datetime.now() - timedelta(seconds=5)
-    # Supprime les notifications plus vieilles que 1 minute
-    # old_notif = Notification.objects.filter(date__lt=time_threshold).delete()
-    notifs = Notification.objects.filter(date__gt=time_threshold)
+    if request.method == 'GET':
+        time_threshold = datetime.now() - timedelta(seconds=5)
+        notifs = Notification.objects.filter(date__gt=time_threshold)
+        result = ""
+    elif request.method == 'POST':
+        nbNotif = int(request.POST.get('nbNotif'))
+        notifs = Notification.objects.order_by('-date')[:nbNotif]
     result = "{\"notifications\":["
     for n in notifs:
         result+="{{\"date\":\"{}\",\"message\":\"{}\"}},".format(n.date, n.message)
