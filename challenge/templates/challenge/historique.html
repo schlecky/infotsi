@@ -92,6 +92,12 @@
       }
     }
 
+
+    function pad (str, max) {
+      str = str.toString();
+      return str.length < max ? pad("0" + str, max) : str;
+    }
+
     function majEvenements(notifs){
       table = document.getElementById("evenements");
       tbody = table.getElementsByTagName("tbody")[0];
@@ -106,7 +112,7 @@
         ligne.appendChild(cmessage);
         new_tbody.appendChild(ligne);
         date = new Date(notifs[i]['date'])
-        cdate.innerHTML = date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()+" à "+date.getHours()+":"+date.getMinutes();
+        cdate.innerHTML = pad(date.getDate(),2)+"/"+pad(date.getMonth(),2)+"/"+date.getFullYear()+" à "+pad(date.getHours(),2)+":"+pad(date.getMinutes(),2);
         cmessage.innerHTML = notifs[i]['message'];
       }
 
@@ -143,6 +149,9 @@
     <option value="500">500</option>
   </select> 
   derniers événements.
+  <button onclick="selectChanged()">
+    Actualiser
+  </button>
 </div>
 
 
