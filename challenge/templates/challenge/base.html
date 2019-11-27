@@ -76,8 +76,18 @@ Comme tu es prof, tu as accès à la section : <a href={% url 'challenge:adminis
 <script charset="utf-8">
 
 dejaAffichees = [];
-notifications = document.getElementById("notification");
 
+function ajouteNotification(message){
+    notifications = document.getElementById("notification");
+    notif = document.createElement("DIV");
+    notif.className = "notif";
+    notif.innerHTML = message;
+    notif.style.opacity = 0;
+    notifications.appendChild(notif);
+    setTimeout(function(node){node.style.opacity=1},10, notif);
+    setTimeout(function(node){node.style.opacity=0;},9000, notif);
+    setTimeout(function(node){notifications.removeChild(node);},10000, notif);
+}
 
 
 function checkNotifications(){
@@ -88,14 +98,7 @@ function checkNotifications(){
         for(i=0; i<data.notifications.length; i++){
           if (!(dejaAffichees.includes(data.notifications[i].date))){
             dejaAffichees.push(data.notifications[i].date);
-            notif = document.createElement("DIV");
-            notif.className = "notif";
-            notif.innerHTML = data.notifications[i].message;
-            notif.style.opacity = 0;
-            notifications.appendChild(notif);
-            setTimeout(function(){notif.style.opacity = 1},10);
-            setTimeout(function(){notif.style.opacity=0;},9000);
-            setTimeout(function(){notifications.removeChild(notif);},10000);
+            ajouteNotification(data.notifications[i].message);
           }
         }
       }
